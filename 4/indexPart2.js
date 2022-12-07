@@ -8,6 +8,12 @@ const processLine = (line) => {
   [lo1, hi1] = first.split("-").map((i) => parseInt(i));
   [lo2, hi2] = second.split("-").map((i) => parseInt(i));
 
+  /*
+  lo1                 hi1
+  |-------------------|
+          lo2---------|       hi2
+          |-------------------|
+*/
   const maxlo = Math.max(lo1, lo2);
   const minhi = Math.min(hi1, hi2);
 
