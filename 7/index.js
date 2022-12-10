@@ -25,12 +25,12 @@ input.forEach((line) => {
       break;
     default:
       auxStr = "";
-      fileSizes["/"] += parseInt(command[0]);
       currentDirs.reduce((str, i) => {
+        console.log(i);
         if (fileSizes[str + i]) fileSizes[str + i] += parseInt(command[0]);
         else fileSizes[str + i] = parseInt(command[0]);
         return str + i;
-      });
+      }, "");
       break;
   }
 });
@@ -42,5 +42,7 @@ console.log(
 );
 
 console.log(
-  Math.min(...Object.values(fileSizes).filter((i) => i >= fileSizes["/"] - 40000000))
+  Math.min(
+    ...Object.values(fileSizes).filter((i) => i >= fileSizes["/"] - 40000000)
+  )
 );
