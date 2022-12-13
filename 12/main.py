@@ -1,6 +1,7 @@
 import heapq
 import string
 import sys
+from collections import deque
 
 INPUT = "input.txt"
 
@@ -16,7 +17,7 @@ def read_input():
     return input
 
 
-def create_graph(input):
+def create_graph(input, part_2=False):
 
     graph = dict()
     start = None
@@ -28,9 +29,6 @@ def create_graph(input):
         for j in range(width):
             cell = input[i][j]
             graph[(i, j)] = []
-            if cell == 'S':
-                start = (i, j)
-                continue
             if cell == 'E':
                 goal = (i, j)
 
@@ -39,27 +37,32 @@ def create_graph(input):
                     if elevation[input[ni][nj]] - elevation[input[i][j]] >= -1:
                         graph[(i, j)].append((ni, nj))
 
+    for i in range(height):
+        for j in range(width):
+            if (input[i][j] == 'S' and not part_2) or (input[i][j] == 'a' == 1 and part_2):
+                start = (i, j)
+
     return graph, start, goal
 
 
 def bfs(graph, root, goal):
-    Q = []
-    visited = dict(zip(graph.keys(), [False for _ in graph]))
-    visited[root] = True
-    Q.insert(0, root)
-    count = 0
+    Q = deque()
+    V = set()
+    Q.append((root, 0))
     while Q:
-        v = Q.pop()
+        v, cost = Q.popleft()
+        if v in V:
+            continue
+        V.add(v)
         if v == goal:
-            print(count)
-            return
+            return cost
         for w in graph[v]:
-            if not visited[w]:
-                count += 1
-                visited[w] = True
-                Q.insert(0, w)
+            Q.append((w, cost+1))
 
 
 input = read_input()
 graph, start, goal = create_graph(input)
-bfs(graph, goal, start)
+print(bfs(graph, goal, start))
+
+graph, start, goal = create_graph(input, True)
+print(bfs(graph, goal, start))
